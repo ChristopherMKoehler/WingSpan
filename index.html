@@ -25,7 +25,7 @@
         <div class="col-md-6">
           <form class="">
             <label> To:
-              <input class="form-control" type="text">
+              <input id="searchTextField" class="form-control" type="text">
               <div class="results-to">
                 <ul>
                 </ul>
@@ -47,21 +47,26 @@
     </div>
 
     <script>
+      var start = {lat: 39.37520, lng: -95.3277};
       function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
+          zoom: 3,
+          center: start
         });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
+        // var marker = new google.maps.Marker({
+        //   position: start,
+        //   map: map
+        // });
+
+
       }
+
+
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHQx2TAhnKAbot2BSAFNnkiFjgVru2i9Q&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHQx2TAhnKAbot2BSAFNnkiFjgVru2i9Q&callback=initMap&libraries=places">
     </script>
+    <script type="text/javascript" src="./src/wingspan.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </body>
 </html>
