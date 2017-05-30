@@ -25,7 +25,7 @@
         <div class="col-md-6">
           <form class="">
             <label> To:
-              <input id="searchTextField" class="form-control" type="text">
+              <input id="toAirport" class="form-control" onchange="placesRequest('to')" type="text">
               <div class="results-to">
                 <ul>
                 </ul>
@@ -33,7 +33,7 @@
             </label>
 
             <label> From:
-              <input class="form-control" type="text">
+              <input id="fromAirport" class="form-control" onchange="placesRequest('from')" type="text">
               <div class="results-from">
                 <ul>
                 </ul>
@@ -47,9 +47,10 @@
     </div>
 
     <script>
+      var map;
       var start = {lat: 39.37520, lng: -95.3277};
       function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+          map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
           center: start
         });
@@ -66,6 +67,7 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHQx2TAhnKAbot2BSAFNnkiFjgVru2i9Q&callback=initMap&libraries=places">
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="./src/wingspan.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </body>
