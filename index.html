@@ -23,17 +23,17 @@
           <div id="map"></div>
         </div>
         <div class="col-md-6">
-          <form class="">
+          <form class="" autocomplete="off">
             <label> To:
-              <input id="toAirport" class="form-control" onchange="placesRequest('to')" type="text">
-              <div class="results-to">
+              <input id="toAirport" class="form-control" oninput="placesRequest('to')" type="text">
+              <div class="results-to" hidden="true">
                 <ul>
                 </ul>
               </div>
             </label>
 
             <label> From:
-              <input id="fromAirport" class="form-control" onchange="placesRequest('from')" type="text">
+              <input id="fromAirport" class="form-control" oninput="placesRequest('from')" type="text">
               <div class="results-from">
                 <ul>
                 </ul>
@@ -64,7 +64,7 @@
 
 
     </script>
-    <script async defer
+    <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHQx2TAhnKAbot2BSAFNnkiFjgVru2i9Q&callback=initMap&libraries=places">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
