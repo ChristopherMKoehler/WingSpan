@@ -10,6 +10,7 @@ var flightPath = null;
 $(document).ready(() => {
   $(`.results-to`).hide();
   $(`.results-from`).hide();
+  $(".table").hide();
 
   $(".distance-form").submit(e => {
     e.preventDefault();
@@ -39,7 +40,8 @@ $(document).ready(() => {
       });
 
       flightPath.setMap(map);
-      getDistance(coordinates["to"], coordinates["from"]);
+      let distMeters = getDistance(coordinates["to"], coordinates["from"]);
+      populateTable(distMeters);
     }
   })
 })
@@ -54,29 +56,36 @@ function placesRequest(input) {
   };
 
 
+  if(keyword.value === "") {
+    $(`.results-${input}`).hide();
+  } else {
+    service.textSearch(request, (results, status) => {
+      $(`.results-${input} ul`).html("");
 
-  service.textSearch(request, (results, status) => {
-    $(`.results-${input} ul`).html("");
+      if(results != null) {
+        results = results.filter(res => res.formatted_address.indexOf("United States") >= 0);
 
-    for(let i = 0; i < 3; i++) {
-      if(results[i] === undefined) break;
-      currentResults[results[i].name] = [results[i].geometry.location.lat(), results[i].geometry.location.lng()];
-      $(`.results-${input} ul`).append(`<li class="${input}-results">${results[i].name}</li>`);
-    }
 
-    if(results.length > 0) $(`.results-${input}`).show();
-    else $(`.results-${input}`).hide();
+        for(let i = 0; i < Math.min(3, results.length); i++) {
+          currentResults[results[i].name] = [results[i].geometry.location.lat(), results[i].geometry.location.lng()];
+          $(`.results-${input} ul`).append(`<li class="${input}-results">${results[i].name}</li>`);
+        }
 
-    $(`.results-${input} ul`).css("list-style", "none");
-    $(`.results-${input} ul`).css("padding", "0");
-    $(`.results-${input} ul`).css("margin", "0");
+        if(results.length > 0) $(`.results-${input}`).show();
+        else $(`.results-${input}`).hide();
+      }
 
-    $(`.results-${input} li`).on("click", e => {
-      $(`.results-${input}`).hide();
-      $(`#${input}Airport`)[0].value = e.target.innerHTML;
-      coordinates[input] = currentResults[e.target.innerHTML];
+      $(`.results-${input} ul`).css("list-style", "none");
+      $(`.results-${input} ul`).css("padding", "0");
+      $(`.results-${input} ul`).css("margin", "0");
+
+      $(`.results-${input} li`).on("click", e => {
+        $(`.results-${input}`).hide();
+        $(`#${input}Airport`)[0].value = e.target.innerHTML;
+        coordinates[input] = currentResults[e.target.innerHTML];
+      });
     });
-  });
+  }
 }
 
 
@@ -98,11 +107,19 @@ function getDistance(to, from) {
 
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-console.log(earthRadius * c);
  return earthRadius * c;
 
 }
 
 function toRadians(deg) {
   return (Math.PI * deg) / 180;
+}
+
+function populateTable(distMeters) {
+  $(".km").html(`${~~(distMeters / 1000)} kilometers`);
+  $(".mi").html(`${~~(distMeters * 0.000621371)} miles`);
+  $(".nm").html(`${~~(distMeters * 0.00053995663640604751)} nautical miles`);
+  $(".ly").html(`${(distMeters * 1.057e-16)} light years`);
+
+  $(".table").show();
 }
