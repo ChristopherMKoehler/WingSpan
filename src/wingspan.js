@@ -4,10 +4,44 @@ var coordinates = {
 };
 var currentResults = {};
 var service = new google.maps.places.PlacesService(map);
+var markers = [];
+var flightPath = null;
 
 $(document).ready(() => {
   $(`.results-to`).hide();
   $(`.results-from`).hide();
+
+  $(".distance-form").submit(e => {
+    e.preventDefault();
+    markers.map(mark => mark.setMap(null));
+    markers = [];
+
+    if(flightPath != null) {
+      flightPath.setMap(null);
+    }
+
+    if(coordinates["to"] != null && coordinates["from"] != null) {
+      markers.push(new google.maps.Marker({
+        position: {lat: coordinates["to"][0], lng: coordinates["to"][1]},
+        map: map
+      }));
+
+      markers.push(new google.maps.Marker({
+        position: {lat: coordinates["from"][0], lng: coordinates["from"][1]},
+        map: map
+      }));
+
+      flightPath = new google.maps.Polyline({
+        path: markers.map(mrk => mrk.getPosition()),
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      });
+
+      flightPath.setMap(map);
+      getDistance(coordinates["to"], coordinates["from"]);
+    }
+  })
 })
 
 function placesRequest(input) {
@@ -43,4 +77,32 @@ function placesRequest(input) {
       coordinates[input] = currentResults[e.target.innerHTML];
     });
   });
+}
+
+
+function getDistance(to, from) {
+  const earthRadius = 6371e3;
+  let toLat = to[0];
+  let fromLat = from[0];
+  let toLon = to[1];
+  let fromLon = from[1];
+
+  let psiOne = toRadians(toLat);
+  let psiTwo = toRadians(fromLat);
+  let psiDifference = toRadians(fromLat - toLat);
+  let lambdaDifference = toRadians(fromLon - toLon);
+
+  var a = Math.sin(psiDifference/2) * Math.sin(psiDifference/2) +
+         Math.cos(psiOne) * Math.cos(psiTwo) *
+         Math.sin(lambdaDifference/2) * Math.sin(lambdaDifference/2);
+
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+console.log(earthRadius * c);
+ return earthRadius * c;
+
+}
+
+function toRadians(deg) {
+  return (Math.PI * deg) / 180;
 }
