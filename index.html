@@ -11,7 +11,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="row">
+      <div id="head" class="row">
         <h1>
           Wingspan
           <i class="fa fa-plane" aria-hidden="true"></i>
@@ -23,7 +23,7 @@
           <div id="map"></div>
         </div>
         <div class="col-md-6">
-          <form class="" autocomplete="off">
+          <form class="distance-form" autocomplete="off" onsubmit="return false">
             <label> To:
               <input id="toAirport" class="form-control" oninput="placesRequest('to')" type="text">
               <div class="results-to" hidden="true">
@@ -40,7 +40,7 @@
               </div>
             </label>
 
-            <input type="submit">
+            <input id="submit" class="btn btn-primary" type="submit">
           </form>
         </div>
       </div>
@@ -54,12 +54,6 @@
           zoom: 3,
           center: start
         });
-        // var marker = new google.maps.Marker({
-        //   position: start,
-        //   map: map
-        // });
-
-
       }
 
 
